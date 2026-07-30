@@ -1,0 +1,45 @@
+﻿@model BibliotecaMVC.Models.Libro
+
+@{
+    ViewData["Title"] = "Agregar Libro";
+}
+
+<h2 class="my-4">Agregar Nuevo Libro</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label asp-for="Titulo" class="form-label">Título</label>
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Autor" class="form-label">Autor</label>
+                <input asp-for="Autor" class="form-control" />
+                <span asp-validation-for="Autor" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Genero" class="form-label">Género</label>
+                <input asp-for="Genero" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AnioPublicacion" class="form-label">Año de Publicación</label>
+                <input asp-for="AnioPublicacion" class="form-control" type="number" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ImagenUrl" class="form-label">Nombre del archivo de Imagen (ej: libro.jpg)</label>
+                <input asp-for="ImagenUrl" class="form-control" placeholder="ejemplo.jpg" />
+                <small class="form-text text-muted">Asegúrate de guardar la imagen en la carpeta wwwroot/images/</small>
+            </div>
+
+            <button type="submit" class="btn btn-success">Guardar Libro</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

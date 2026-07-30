@@ -1,0 +1,28 @@
+﻿@model BibliotecaMVC.Models.Libro
+
+@{
+    ViewData["Title"] = "Detalle del Libro";
+}
+
+<h2 class="my-4">Detalle del Libro</h2>
+
+<div class="card col-md-6 p-3 shadow-sm">
+    <img src="~/images/@Model.ImagenUrl" class="card-img-top mb-3" style="max-height: 300px; object-fit: contain;" onError="this.src='/images/default.jpg';" />
+    <dl class="row">
+        <dt class="col-sm-4">Título</dt>
+        <dd class="col-sm-8">@Model.Titulo</dd>
+
+        <dt class="col-sm-4">Autor</dt>
+        <dd class="col-sm-8">@Model.Autor</dd>
+
+        <dt class="col-sm-4">Género</dt>
+        <dd class="col-sm-8">@Model.Genero</dd>
+
+        <dt class="col-sm-4">Año</dt>
+        <dd class="col-sm-8">@Model.AnioPublicacion</dd>
+    </dl>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+        <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+    </div>
+</div>

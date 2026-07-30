@@ -5,17 +5,91 @@ namespace BibliotecaMVC.Controllers
 {
     public class LibrosController : Controller
     {
+        // Lista de los libros (es prueba porque no se si lo de las imagenes va a funcionar)
+        private static List<Libro> _libros = new List<Libro>
+        {
+            new Libro { Id = 1, Titulo = "Cien años de soledad", Autor = "Gabriel García Márquez", Genero = "Realismo Mágico", AnioPublicacion = 1967, ImagenUrl = "cien_anios.webp" },
+            new Libro { Id = 2, Titulo = "Ficciones", Autor = "Jorge Luis Borges", Genero = "Ficción", AnioPublicacion = 1944, ImagenUrl = "ficciones.jpg" }
+        };
+
+        // El index de libros
         public IActionResult Index()
         {
-            List<Libro> Libros = new List<Libro>
+            return View(_libros);
+        }
+
+        // detalles de un libro
+        public IActionResult Details(int id)
+        {
+            var libro = _libros.FirstOrDefault(l => l.Id == id);
+            if (libro == null) return NotFound();
+            return View(libro);
+        }
+
+        // El get de libros
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // El post de libros
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Libro libro)
+        {
+            if (ModelState.IsValid)
             {
-                new Libro { Id = 1, Titulo = "Cien Años de Soledad", Autor = "Gabriel García Márquez", Categoria = "Novela", Precio = 19.99m, Disponible = true },
-                new Libro { Id = 2, Titulo = "La casa de los espíritus", Autor = "Isabel Allende", Categoria = "Novela", Precio = 24.99m, Disponible = true },
-                new Libro { Id = 3, Titulo = "Ficciones", Autor = "Jorge Luis Borges", Categoria = "Cuento", Precio = 15.99m, Disponible = false },
-                new Libro { Id = 4, Titulo = "La ciudad y los perros", Autor = "Mario Vargas Llosa", Categoria = "Novela", Precio = 22.99m, Disponible = true },
-                new Libro { Id = 5, Titulo = "Rayuela", Autor = "Julio Cortázar", Categoria = "Novela", Precio = 20.99m, Disponible = false }
-            };
-            return View(Libros);
+                libro.Id = _libros.Any() ? _libros.Max(l => l.Id) + 1 : 1;
+                if (string.IsNullOrEmpty(libro.ImagenUrl))
+                {
+                    libro.ImagenUrl = "default.jpg"; // Imagen por defecto(prueba)
+                }
+                _libros.Add(libro);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(libro);
+        }
+
+        // Editar el libro (GET)
+        public IActionResult Edit(int id)
+        {
+            var libro = _libros.FirstOrDefault(l => l.Id == id);
+            if (libro == null) return NotFound();
+            return View(libro);
+        }
+
+        // Editar el Libro (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Libro libroModificado)
+        {
+            if (id != libroModificado.Id) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                var libro = _libros.FirstOrDefault(l => l.Id == id);
+                if (libro != null)
+                {
+                    libro.Titulo = libroModificado.Titulo;
+                    libro.Autor = libroModificado.Autor;
+                    libro.Genero = libroModificado.Genero;
+                    libro.AnioPublicacion = libroModificado.AnioPublicacion;
+                    libro.ImagenUrl = libroModificado.ImagenUrl;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(libroModificado);
+        }
+
+        // Eliminar Libro
+        public IActionResult Delete(int id)
+        {
+            var libro = _libros.FirstOrDefault(l => l.Id == id);
+            if (libro != null)
+            {
+                _libros.Remove(libro);
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }
