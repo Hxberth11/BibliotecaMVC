@@ -2,7 +2,74 @@
     ViewData["Title"] = "Acerca de";
 }
 
-<div class="text-center">
-    <h1>Acerca de</h1>
-    <p>Bienvenido a la sección de Acerca de la biblioteca.</p>
-</div>
+<!-- Carga de Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<main class="about-container pb-5">
+    <!-- Encabezado de la página -->
+    <header class="about-header text-center py-4 mb-4">
+        <h1 class="about-title display-5 fw-bold">Acerca de la Biblioteca MVC</h1>
+        <p class="about-subtitle text-muted mb-0">Sistema de información y gestión para el control de recursos bibliográficos</p>
+    </header>
+
+    <!-- Sección: Misión y Visión -->
+    <section class="about-section row g-4 mb-5">
+        <article class="col-md-6">
+            <div class="about-card p-4 h-100">
+                <h2 class="about-card-title text-primary h4 mb-3">
+                    <i class="bi bi-compass me-2"></i>Nuestra Misión
+                </h2>
+                <p class="text-secondary mb-0">
+                    Ofrecer una plataforma ágil, eficiente y moderna para la gestión integral de recursos bibliográficos, facilitando el acceso a la lectura y el control administrativo de libros y autores.
+                </p>
+            </div>
+        </article>
+
+        <article class="col-md-6">
+            <div class="about-card p-4 h-100">
+                <h2 class="about-card-title text-primary h4 mb-3">
+                    <i class="bi bi-eye me-2"></i>Nuestra Visión
+                </h2>
+                <p class="text-secondary mb-0">
+                    Convertirnos en el sistema de referencia para instituciones educativas y bibliotecas comunitarias, integrando tecnologías web estándar para ofrecer la mejor experiencia de usuario.
+                </p>
+            </div>
+        </article>
+    </section>
+
+    <!-- Sección: Características principales -->
+    <section class="about-features">
+        <h2 class="text-center h3 mb-4 text-dark">Servicios y Módulos</h2>
+        <div class="row g-4">
+            <article class="col-md-4 text-center">
+                <div class="feature-box p-4 h-100">
+                    <div class="feature-icon-container mb-3">
+                        <i class="bi bi-journal-bookmark fs-1 text-primary"></i>
+                    </div>
+                    <h3 class="h5 font-weight-bold">Catálogo Completo</h3>
+                    <p class="text-muted small mb-0">Organización eficiente de libros, clasificaciones y categorías.</p>
+                </div>
+            </article>
+
+            <article class="col-md-4 text-center">
+                <div class="feature-box p-4 h-100">
+                    <div class="feature-icon-container mb-3">
+                        <i class="bi bi-people fs-1 text-primary"></i>
+                    </div>
+                    <h3 class="h5 font-weight-bold">Gestión de Autores</h3>
+                    <p class="text-muted small mb-0">Registro detallado y consulta rápida de autores y sus obras.</p>
+                </div>
+            </article>
+
+            <article class="col-md-4 text-center">
+                <div class="feature-box p-4 h-100">
+                    <div class="feature-icon-container mb-3">
+                        <i class="bi bi-shield-check fs-1 text-primary"></i>
+                    </div>
+                    <h3 class="h5 font-weight-bold">Plataforma Segura</h3>
+                    <p class="text-muted small mb-0">Desarrollado bajo el patrón MVC con ASP.NET Core.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
