@@ -1,7 +1,6 @@
 /* ==========================================
    Estilos Personalizados - Página Acerca De
    ========================================== */
-
 .about-header {
     background-color: #f8f9fa;
     border-radius: 8px;
@@ -55,12 +54,83 @@
 }
 
 /* ==========================================
-   Actividad 4: Media Queries & Diseño Responsivo
+   ACTIVIDAD 1: Organizar con Flexbox
+   ========================================== */
+.hero-flex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2.5rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 5px solid #0d6efd;
+    margin-bottom: 2rem;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* ==========================================
+   ACTIVIDAD 2: Estructura con CSS Grid
+   ========================================== */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* ==========================================
+   ACTIVIDAD 4: Componentes Reutilizables (Botones)
+   ========================================== */
+.btn-custom {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    border-radius: 6px;
+    background-color: #0d6efd;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .btn-custom:hover {
+        background-color: #0b5ed7;
+        color: #ffffff;
+    }
+
+.btn-secondary-custom {
+    background-color: #6c757d;
+}
+
+    .btn-secondary-custom:hover {
+        background-color: #5c636a;
+    }
+
+/* ==========================================
+   ACTIVIDAD 3: Media Queries & Diseño Responsivo
    ========================================== */
 
 /* Dispositivos móviles (Pantallas menores a 768px) */
 @media (max-width: 767.98px) {
     /* Ajustes en el Hero / Banner principal */
+    .hero-flex {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
     .bg-primary.p-5 {
         padding: 2rem 1rem !important;
     }
