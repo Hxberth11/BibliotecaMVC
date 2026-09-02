@@ -1,7 +1,13 @@
+using BibliotecaMVC.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Registramos el servicio IAutorService con la implementación AutorService
+// usando el ciclo de vida Scoped
+builder.Services.AddScoped<IAutorService, AutorMockService>();
 
 var app = builder.Build();
 
@@ -24,6 +30,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();
