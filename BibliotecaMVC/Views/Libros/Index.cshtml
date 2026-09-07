@@ -14,13 +14,30 @@
     {
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm">
-                <!-- Imagen desde wwwroot/images/ -->
-                <img src="~/images/@libro.ImagenUrl" class="card-img-top" alt="@libro.Titulo" style="height: 250px; object-fit: cover;" />
+                <!-- Imagen completa con object-fit: contain -->
+                <img src="~/images/@libro.ImagenUrl" 
+                     class="card-img-top bg-light" 
+                     alt="@libro.Titulo" 
+                     style="height: 250px; object-fit: contain; padding: 5px;" 
+                     asp-append-version="true" />
+                     
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">@libro.Titulo</h5>
                     <p class="card-text text-muted mb-1"><strong>Autor:</strong> @libro.Autor</p>
                     <p class="card-text text-muted mb-1"><strong>Género:</strong> @libro.Genero</p>
-                    <p class="card-text text-muted"><strong>Año:</strong> @libro.AnioPublicacion</p>
+                    <p class="card-text text-muted mb-1"><strong>Año:</strong> @libro.AnioPublicacion</p>
+                    <p class="card-text text-muted mb-1"><strong>Precio:</strong> $@libro.Precio.ToString("F2")</p>
+                    <p class="card-text mb-3">
+                        <strong>Estado:</strong>
+                        @if (libro.Disponible)
+                        {
+                            <span class="badge bg-success">Disponible</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Agotado</span>
+                        }
+                    </p>
                     
                     <div class="mt-auto d-flex justify-content-between">
                         <a asp-action="Details" asp-route-id="@libro.Id" class="btn btn-info btn-sm text-white">Detalle</a>

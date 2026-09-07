@@ -7,7 +7,7 @@ namespace BibliotecaMVC.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "El título es obligatorio")] // Preferi ponerle mensajes Ingeniero
+        [Required(ErrorMessage = "El título es obligatorio")]
         public string Titulo { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El autor es obligatorio")]
@@ -17,7 +17,14 @@ namespace BibliotecaMVC.Models
 
         public int AnioPublicacion { get; set; }
 
-        // la imagen guardada en wwwroot/images
+        // La imagen guardada en wwwroot/images
         public string ImagenUrl { get; set; } = string.Empty;
+
+        // Nuevas propiedades
+        [Range(0.01, 10000.00, ErrorMessage = "El precio debe ser un valor positivo mayor a 0")]
+        [DataType(DataType.Currency)]
+        public decimal Precio { get; set; }
+
+        public bool Disponible { get; set; } = true;
     }
 }

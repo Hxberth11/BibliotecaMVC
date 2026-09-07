@@ -1,13 +1,16 @@
 using BibliotecaMVC.Services;
+using BibliotecaMVC.Respositories; // Importamos el namespace del repositorio
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Registramos el servicio IAutorService con la implementación AutorService
-// usando el ciclo de vida Scoped
-builder.Services.AddScoped<IAutorService, AutorMockService>();
+// Registro de servicios
+builder.Services.AddScoped<IAutorService, AutorService>();
+
+// Registramos el repositorio de libros como Singleton para mantener los datos en memoria
+builder.Services.AddSingleton<IRepositorioLibro, RepositorioEnMemoria>();
 
 var app = builder.Build();
 
@@ -21,7 +24,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapStaticAssets();

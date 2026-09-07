@@ -13,7 +13,9 @@ namespace BibliotecaMVC.Services
             new Autor { Id = 2, Nombre = "Isabel", Apellido = "Allende", Nacionalidad = "Chilena", FechaNacimiento = new DateTime(1942, 8, 2), Activo = true },
             new Autor { Id = 3, Nombre = "Jorge Luis", Apellido = "Borges", Nacionalidad = "Argentina", FechaNacimiento = new DateTime(1899, 8, 24), Activo = false },
             new Autor { Id = 4, Nombre = "Mario", Apellido = "Vargas Llosa", Nacionalidad = "Peruana", FechaNacimiento = new DateTime(1936, 3, 28), Activo = true },
-            new Autor { Id = 5, Nombre = "Julio", Apellido = "Cortázar", Nacionalidad = "Argentina", FechaNacimiento = new DateTime(1914, 8, 26), Activo = false }
+            new Autor { Id = 5, Nombre = "Julio", Apellido = "Cortázar", Nacionalidad = "Argentina", FechaNacimiento = new DateTime(1914, 8, 26), Activo = false },
+            new Autor { Id = 6, Nombre = "Miguel", Apellido = "de Cervantes", Nacionalidad = "Española", FechaNacimiento = new DateTime(1547, 9, 29), Activo = true },
+            new Autor { Id = 7, Nombre = "Octavio", Apellido = "Paz", Nacionalidad = "Mexicana", FechaNacimiento = new DateTime(1914, 3, 31), Activo = true }
         };
 
         public IEnumerable<Autor> ObtenerTodos()
