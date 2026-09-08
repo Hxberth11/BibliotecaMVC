@@ -1,0 +1,40 @@
+﻿@model IEnumerable<BibliotecaMVC.Models.Categoria>
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<h2 class="mt-4 mb-4">Listado de Categorías</h2>
+<a class="btn btn-primary" asp-controller="Categorias" asp-action="Create">Agregar categoría</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var categoria in Model)
+        {
+            <tr>
+                <td>@categoria.Id</td>
+                <td>@categoria.Nombre</td>
+                <td>@categoria.Descripcion</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+<script>
+        var mensaje = '@(TempData["SuccessMessage"] ?? "")';
+        if(mensaje) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: mensaje,
+                confirmButtonText: 'Aceptar'
+            });
+        }
+</script>
+}
