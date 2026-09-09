@@ -4,13 +4,16 @@
 }
 
 <h2 class="mt-4 mb-4">Listado de Categorías</h2>
-<a class="btn btn-primary" asp-controller="Categorias" asp-action="Create">Agregar categoría</a>
+
+<a class="btn btn-primary mb-3" asp-controller="Categorias" asp-action="Create">Agregar categoría</a>
+
 <table class="table table-striped">
     <thead>
         <tr>
             <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -20,13 +23,17 @@
                 <td>@categoria.Id</td>
                 <td>@categoria.Nombre</td>
                 <td>@categoria.Descripcion</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@categoria.Id" class="btn btn-primary btn-sm">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@categoria.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
             </tr>
         }
     </tbody>
 </table>
 
-@section Scripts{
-<script>
+@section Scripts {
+    <script>
         var mensaje = '@(TempData["SuccessMessage"] ?? "")';
         if(mensaje) {
             Swal.fire({
@@ -36,5 +43,5 @@
                 confirmButtonText: 'Aceptar'
             });
         }
-</script>
+    </script>
 }
