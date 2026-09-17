@@ -28,6 +28,13 @@ namespace BibliotecaMVC.Services
             return _Autores.FirstOrDefault(a => a.Id == id);
         }
 
+        // Método agregado para resolver el error CS0535/CS1061
+        public void Agregar(Autor autor)
+        {
+            autor.Id = _Autores.Any() ? _Autores.Max(a => a.Id) + 1 : 1;
+            _Autores.Add(autor);
+        }
+
         public void Actualizar(Autor autorActualizado)
         {
             var autorExistente = _Autores.FirstOrDefault(a => a.Id == autorActualizado.Id);

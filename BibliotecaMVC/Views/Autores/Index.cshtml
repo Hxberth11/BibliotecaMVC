@@ -6,42 +6,54 @@
 
 <h2 class="my-4">Listado de Autores</h2>
 
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Nacionalidad</th>
-            <th>Fecha Nacimiento</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var autor in Model)
-        {
+@if (!Model.Any())
+{
+    <p>Hay 0 autores registrados.</p>
+    <a asp-action="Create" class="btn btn-primary">Nuevo Autor +</a>
+}
+else
+{
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-primary">Nuevo Autor +</a>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
             <tr>
-                <td>@autor.Id</td>
-                <td>@autor.Nombre</td>
-                <td>@autor.Apellido</td>
-                <td>@autor.Nacionalidad</td>
-                <td>@autor.FechaNacimiento.ToString("dd/MM/yyyy")</td>
-                <td>
-                    @if (autor.Activo)
-                    {
-                        <span class="badge bg-success">Activo</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger">Inactivo</span>
-                    }
-                </td>
-                <td>
-                    <a asp-action="Editar" asp-route-id="@autor.Id" class="btn btn-warning btn-sm">Editar</a>
-                    <a asp-action="Eliminar" asp-route-id="@autor.Id" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar este autor?');">Eliminar</a>
-                </td>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Nacionalidad</th>
+                <th>Fecha Nacimiento</th>
+                <th>Estado</th>
+                <th>Acciones</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var autor in Model)
+            {
+                <tr>
+                    <td>@autor.Id</td>
+                    <td>@autor.Nombre</td>
+                    <td>@autor.Apellido</td>
+                    <td>@autor.Nacionalidad</td>
+                    <td>@autor.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @if (autor.Activo)
+                        {
+                            <span class="badge bg-success">Activo</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Inactivo</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Editar" asp-route-id="@autor.Id" class="btn btn-warning btn-sm">Editar</a>
+                        <a asp-action="Eliminar" asp-route-id="@autor.Id" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar este autor?');">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

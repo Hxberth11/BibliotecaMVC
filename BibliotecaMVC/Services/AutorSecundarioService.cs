@@ -18,6 +18,13 @@ namespace BibliotecaMVC.Services
 
         public Autor? ObtenerPorId(int id) => _AutoresPrueba.FirstOrDefault(a => a.Id == id);
 
+        // Método agregado para cumplir el contrato de IAutorService
+        public void Agregar(Autor autor)
+        {
+            autor.Id = _AutoresPrueba.Any() ? _AutoresPrueba.Max(a => a.Id) + 1 : 101;
+            _AutoresPrueba.Add(autor);
+        }
+
         public void Actualizar(Autor autorActualizado)
         {
             var autor = _AutoresPrueba.FirstOrDefault(a => a.Id == autorActualizado.Id);

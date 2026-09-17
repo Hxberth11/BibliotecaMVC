@@ -1,10 +1,15 @@
 using BibliotecaMVC.Services;
 using BibliotecaMVC.Respositories; // Importamos el namespace del repositorio
+using Microsoft.EntityFrameworkCore;
+using BibliotecaMVC.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<BibliotecaContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("BibliotecaDB")));
 
 // Registro de servicios
 builder.Services.AddScoped<IAutorService, AutorService>();

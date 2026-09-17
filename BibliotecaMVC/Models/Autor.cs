@@ -15,6 +15,9 @@ namespace BibliotecaMVC.Models
         public string Nacionalidad { get; set; }
         [DataType(DataType.Date)]
         public DateTime FechaNacimiento { get; set; }
-        public bool Activo { get; set; }
+        public bool  Activo { get; set; }
+
+
     }
+
 }

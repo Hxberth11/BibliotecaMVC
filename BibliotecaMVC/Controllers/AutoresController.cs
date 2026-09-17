@@ -1,30 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using BibliotecaMVC.Data;
 using BibliotecaMVC.Models;
-using BibliotecaMVC.Services;
 
 namespace BibliotecaMVC.Controllers
 {
     public class AutoresController : Controller
     {
-        private readonly IAutorService _autorService;
+        // 1. Inyectamos la base de datos (BibliotecaContext) directamente
+        private readonly BibliotecaContext _context;
 
-        // Inyección de dependencias por constructor (Principio de Inversión de Dependencias)
-        public AutoresController(IAutorService autorService)
+        public AutoresController(BibliotecaContext context)
         {
-            _autorService = autorService;
+            _context = context;
         }
 
-        // Listado de Autores
-        public IActionResult Index()
+        // 2. Listado de Autores desde SQL Server
+        public async Task<IActionResult> Index()
         {
-            var autores = _autorService.ObtenerTodos();
+            var autores = await _context.Autores.ToListAsync();
             return View(autores);
         }
 
-        // Detalle del Autor
-        public IActionResult Detalles(int id)
+        // 3. Detalle del Autor
+        public async Task<IActionResult> Details(int id)
         {
-            var autor = _autorService.ObtenerPorId(id);
+            var autor = await _context.Autores.FirstOrDefaultAsync(a => a.Id == id);
             if (autor == null)
             {
                 return NotFound();
@@ -32,36 +33,64 @@ namespace BibliotecaMVC.Controllers
             return View(autor);
         }
 
-        // GET de autor para editar
-        public IActionResult Editar(int id)
+        // 4. GET: Vista para crear autor
+        public IActionResult Create()
         {
-            var autor = _autorService.ObtenerPorId(id);
-            if (autor == null)
-            {
-                return NotFound();
-            }
-            return View(autor);
+            return View();
         }
 
-        // POST de autor para editar
+        // 5. POST: Guardar nuevo autor en la base de datos (Tal como lo tiene el ingeniero)
         [HttpPost]
-        public IActionResult Editar(Autor autorActualizado)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Autor autor)
         {
-            var autorExistente = _autorService.ObtenerPorId(autorActualizado.Id);
-            if (autorExistente == null)
+            if (!ModelState.IsValid)
+            {
+                return View(autor);
+            }
+
+            _context.Autores.Add(autor);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // 6. GET: Vista para editar autor
+        public async Task<IActionResult> Editar(int id)
+        {
+            var autor = await _context.Autores.FindAsync(id);
+            if (autor == null)
             {
                 return NotFound();
             }
-
-            _autorService.Actualizar(autorActualizado);
-            return RedirectToAction("Index");
+            return View(autor);
         }
 
-        // GET para eliminar autor
-        public IActionResult Eliminar(int id)
+        // 7. POST: Guardar cambios de edición
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(Autor autorActualizado)
         {
-            _autorService.Eliminar(id);
-            return RedirectToAction("Index");
+            if (!ModelState.IsValid)
+            {
+                return View(autorActualizado);
+            }
+
+            _context.Autores.Update(autorActualizado);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // 8. GET/POST: Eliminar autor
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            var autor = await _context.Autores.FindAsync(id);
+            if (autor != null)
+            {
+                _context.Autores.Remove(autor);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
