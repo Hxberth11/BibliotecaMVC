@@ -1,0 +1,31 @@
+﻿@model BibliotecaMVC.Models.Libro
+
+@{
+    ViewData["Title"] = "Eliminar Libro";
+}
+
+<div class="container my-4">
+    <div class="card border-danger shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">¿Estás seguro de que deseas eliminar este libro?</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Título</dt>
+                <dd class="col-sm-9">@Model.Titulo</dd>
+
+                <dt class="col-sm-3">Autor</dt>
+                <dd class="col-sm-9">@Model.Autor</dd>
+
+                <dt class="col-sm-3">Precio</dt>
+                <dd class="col-sm-9">@Model.Precio.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</dd>
+            </dl>
+
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger">Confirmar Borrado</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>

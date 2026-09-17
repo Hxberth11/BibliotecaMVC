@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Globalization;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BibliotecaMVC.Models
 {
@@ -20,9 +20,10 @@ namespace BibliotecaMVC.Models
         // La imagen guardada en wwwroot/images
         public string ImagenUrl { get; set; } = string.Empty;
 
-        // Nuevas propiedades
+        // Propiedad Precio con precisión de tipo de columna definida
         [Range(0.01, 10000.00, ErrorMessage = "El precio debe ser un valor positivo mayor a 0")]
         [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Precio { get; set; }
 
         public bool Disponible { get; set; } = true;

@@ -1,44 +1,55 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using BibliotecaMVC.Data;
 using BibliotecaMVC.Models;
-using BibliotecaMVC.Respositories;
 
 namespace BibliotecaMVC.Controllers
 {
     public class LibrosController : Controller
     {
-        private readonly IRepositorioLibro _repositorio;
+        private readonly BibliotecaContext _context;
 
-        public LibrosController(IRepositorioLibro repositorio)
+        public LibrosController(BibliotecaContext context)
         {
-            _repositorio = repositorio;
+            _context = context;
         }
 
-        // GET: Libros
-        public IActionResult Index()
+        // GET: Libros (Mostrar el listado de libros)
+        public async Task<IActionResult> Index()
         {
-            var libros = _repositorio.ObtenerLibros();
+            var libros = await _context.Libros.ToListAsync();
             return View(libros);
         }
 
-        // GET: Libros/Details/5
-        public IActionResult Details(int id)
+        // GET: Libros/Details/5 (Ver detalle de un libro)
+        public async Task<IActionResult> Details(int? id)
         {
-            var libro = _repositorio.ObtenerPorId(id);
-            if (libro == null) return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var libro = await _context.Libros
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (libro == null)
+            {
+                return NotFound();
+            }
 
             return View(libro);
         }
 
-        // GET: Libros/Create
+        // GET: Libros/Create (Mostrar formulario para agregar libro)
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Libros/Create
+        // POST: Libros/Create (Guardar el nuevo libro en SQL Server con EF Core)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Libro libro)
+        public async Task<IActionResult> Create(Libro libro)
         {
             if (ModelState.IsValid)
             {
@@ -47,45 +58,11 @@ namespace BibliotecaMVC.Controllers
                     libro.ImagenUrl = "default.jpg";
                 }
 
-                _repositorio.AgregarLibro(libro);
+                _context.Libros.Add(libro);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(libro);
-        }
-
-        // GET: Libros/Edit/5
-        public IActionResult Edit(int id)
-        {
-            var libro = _repositorio.ObtenerPorId(id);
-            if (libro == null) return NotFound();
-
-            return View(libro);
-        }
-
-        // POST: Libros/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Libro libroModificado)
-        {
-            if (id != libroModificado.Id) return NotFound();
-
-            if (ModelState.IsValid)
-            {
-                _repositorio.ActualizarLibro(libroModificado);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(libroModificado);
-        }
-
-        // GET/POST: Libros/Delete/5
-        public IActionResult Delete(int id)
-        {
-            var libro = _repositorio.ObtenerPorId(id);
-            if (libro != null)
-            {
-                _repositorio.EliminarLibro(libro);
-            }
-            return RedirectToAction(nameof(Index));
         }
     }
 }

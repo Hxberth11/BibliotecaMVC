@@ -6,46 +6,78 @@
 
 <div class="d-flex justify-content-between align-items-center my-4">
     <h2>Listado de Libros</h2>
-    <a asp-action="Create" class="btn btn-success">Agregar Nuevo Libro</a>
+    @if (Model.Any())
+    {
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Agregar Nuevo Libro
+        </a>
+    }
 </div>
 
-<div class="row">
-    @foreach (var libro in Model)
-    {
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <!-- Imagen completa con object-fit: contain -->
-                <img src="~/images/@libro.ImagenUrl" 
-                     class="card-img-top bg-light" 
-                     alt="@libro.Titulo" 
-                     style="height: 250px; object-fit: contain; padding: 5px;" 
-                     asp-append-version="true" />
-                     
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">@libro.Titulo</h5>
-                    <p class="card-text text-muted mb-1"><strong>Autor:</strong> @libro.Autor</p>
-                    <p class="card-text text-muted mb-1"><strong>Género:</strong> @libro.Genero</p>
-                    <p class="card-text text-muted mb-1"><strong>Año:</strong> @libro.AnioPublicacion</p>
-                    <p class="card-text text-muted mb-1"><strong>Precio:</strong> $@libro.Precio.ToString("F2")</p>
-                    <p class="card-text mb-3">
-                        <strong>Estado:</strong>
-                        @if (libro.Disponible)
-                        {
-                            <span class="badge bg-success">Disponible</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">Agotado</span>
-                        }
-                    </p>
-                    
-                    <div class="mt-auto d-flex justify-content-between">
-                        <a asp-action="Details" asp-route-id="@libro.Id" class="btn btn-info btn-sm text-white">Detalle</a>
-                        <a asp-action="Edit" asp-route-id="@libro.Id" class="btn btn-warning btn-sm">Editar</a>
-                        <a asp-action="Delete" asp-route-id="@libro.Id" class="btn btn-danger btn-sm" onclick="return confirm('¿Deseas eliminar este libro?');">Eliminar</a>
+@if (!Model.Any())
+{
+    <div class="card text-center shadow-sm border-0 my-5 p-4 bg-light">
+        <div class="card-body py-5">
+            <div class="mb-3">
+                <i class="bi bi-book text-secondary display-1"></i>
+            </div>
+            <h3 class="card-title text-secondary fw-bold mb-2">Hay 0 libros registrados</h3>
+            <p class="card-text text-muted mb-4">Aún no se han guardado registros en la base de datos SQL Server.</p>
+            <a asp-action="Create" class="btn btn-primary btn-lg px-4 shadow-sm">
+                Agregar el primer libro
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var libro in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <!-- Imagen de la tarjeta con imagen por defecto si viene vacía -->
+                    <img src="~/images/@(string.IsNullOrEmpty(libro.ImagenUrl) ? "default.jpg" : libro.ImagenUrl)" 
+                         class="card-img-top bg-light" 
+                         alt="@libro.Titulo" 
+                         style="height: 250px; object-fit: contain; padding: 10px;" 
+                         asp-append-version="true" />
+                         
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">@libro.Titulo</h5>
+                        <p class="card-text text-muted mb-1"><strong>Autor:</strong> @libro.Autor</p>
+                        <p class="card-text text-muted mb-1"><strong>Género:</strong> @libro.Genero</p>
+                        <p class="card-text text-muted mb-1"><strong>Año:</strong> @libro.AnioPublicacion</p>
+                        
+                        <!-- Formato de Precio en moneda -->
+                        <p class="card-text text-muted mb-1">
+                            <strong>Precio:</strong> 
+                            <span class="text-success fw-bold">
+                                @libro.Precio.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-US"))
+                            </span>
+                        </p>
+
+                        <p class="card-text mb-3">
+                            <strong>Estado:</strong>
+                            @if (libro.Disponible)
+                            {
+                                <span class="badge bg-success">Disponible</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Agotado</span>
+                            }
+                        </p>
+                        
+                        <!-- Botón de Acción (Detalle) -->
+                        <div class="mt-auto pt-2">
+                            <a asp-action="Details" asp-route-id="@libro.Id" class="btn btn-outline-primary w-100 fw-bold">
+                                Ver Detalle
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
+}

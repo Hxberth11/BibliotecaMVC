@@ -4,25 +4,62 @@
     ViewData["Title"] = "Detalle del Libro";
 }
 
-<h2 class="my-4">Detalle del Libro</h2>
+<div class="container my-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Detalle del Libro</h3>
+        </div>
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <!-- Columna de la Portada -->
+                <div class="col-md-4 text-center mb-3 mb-md-0">
+                    <img src="~/images/@(string.IsNullOrEmpty(Model.ImagenUrl) ? "default.jpg" : Model.ImagenUrl)" 
+                         class="img-fluid rounded shadow-sm bg-light" 
+                         alt="@Model.Titulo" 
+                         style="max-height: 350px; object-fit: contain;" 
+                         asp-append-version="true" />
+                </div>
 
-<div class="card col-md-6 p-3 shadow-sm">
-    <img src="~/images/@Model.ImagenUrl" class="card-img-top mb-3" style="max-height: 300px; object-fit: contain;" onError="this.src='/images/default.jpg';" />
-    <dl class="row">
-        <dt class="col-sm-4">Título</dt>
-        <dd class="col-sm-8">@Model.Titulo</dd>
+                <!-- Columna con la Información -->
+                <div class="col-md-8">
+                    <h2 class="fw-bold mb-3">@Model.Titulo</h2>
+                    
+                    <ul class="list-group list-group-flush mb-4">
+                        <li class="list-group-item ps-0">
+                            <strong>Autor:</strong> @Model.Autor
+                        </li>
+                        <li class="list-group-item ps-0">
+                            <strong>Género:</strong> @Model.Genero
+                        </li>
+                        <li class="list-group-item ps-0">
+                            <strong>Año de Publicación:</strong> @Model.AnioPublicacion
+                        </li>
+                        <li class="list-group-item ps-0">
+                            <strong>Precio de Alquiler/Venta:</strong> 
+                            <span class="fs-5 fw-bold text-success">
+                                @Model.Precio.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-US"))
+                            </span>
+                        </li>
+                        <li class="list-group-item ps-0">
+                            <strong>Estado:</strong> 
+                            @if (Model.Disponible)
+                            {
+                                <span class="badge bg-success">Disponible</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Agotado</span>
+                            }
+                        </li>
+                    </ul>
 
-        <dt class="col-sm-4">Autor</dt>
-        <dd class="col-sm-8">@Model.Autor</dd>
-
-        <dt class="col-sm-4">Género</dt>
-        <dd class="col-sm-8">@Model.Genero</dd>
-
-        <dt class="col-sm-4">Año</dt>
-        <dd class="col-sm-8">@Model.AnioPublicacion</dd>
-    </dl>
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
-        <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+                    <div>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver a la Lista
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
