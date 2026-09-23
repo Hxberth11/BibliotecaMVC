@@ -36,22 +36,22 @@ else
         {
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm border-0">
-                    <!-- Imagen de la tarjeta con imagen por defecto si viene vacía -->
-                    <img src="~/images/@(string.IsNullOrEmpty(libro.ImagenUrl) ? "default.jpg" : libro.ImagenUrl)" 
-                         class="card-img-top bg-light" 
-                         alt="@libro.Titulo" 
-                         style="height: 250px; object-fit: contain; padding: 10px;" 
+                    <!-- Imagen de la tarjeta -->
+                    <img src="~/images/@(string.IsNullOrEmpty(libro.ImagenUrl) ? "default.jpg" : libro.ImagenUrl)"
+                         class="card-img-top bg-light"
+                         alt="@libro.Titulo"
+                         style="height: 250px; object-fit: contain; padding: 10px;"
                          asp-append-version="true" />
-                         
+
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title fw-bold">@libro.Titulo</h5>
                         <p class="card-text text-muted mb-1"><strong>Autor:</strong> @libro.Autor</p>
                         <p class="card-text text-muted mb-1"><strong>Género:</strong> @libro.Genero</p>
                         <p class="card-text text-muted mb-1"><strong>Año:</strong> @libro.AnioPublicacion</p>
-                        
+
                         <!-- Formato de Precio en moneda -->
                         <p class="card-text text-muted mb-1">
-                            <strong>Precio:</strong> 
+                            <strong>Precio:</strong>
                             <span class="text-success fw-bold">
                                 @libro.Precio.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-US"))
                             </span>
@@ -68,12 +68,21 @@ else
                                 <span class="badge bg-secondary">Agotado</span>
                             }
                         </p>
-                        
-                        <!-- Botón de Acción (Detalle) -->
-                        <div class="mt-auto pt-2">
-                            <a asp-action="Details" asp-route-id="@libro.Id" class="btn btn-outline-primary w-100 fw-bold">
+
+                        <!-- Botones de Acción (Ver Detalle, Editar y Eliminar con SweetAlert2) -->
+                        <div class="mt-auto pt-2 d-flex gap-1">
+                            <a asp-action="Details" asp-route-id="@libro.Id" class="btn btn-outline-primary btn-sm flex-fill text-center">
                                 Ver Detalle
                             </a>
+                            <a asp-action="Editar" asp-route-id="@libro.Id" class="btn btn-outline-warning btn-sm flex-fill text-center">
+                                Editar
+                            </a>
+                            <form asp-action="Eliminar" asp-route-id="@libro.Id" method="post" class="flex-fill swal-delete-form">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                    Eliminar
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

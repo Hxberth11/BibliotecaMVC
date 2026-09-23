@@ -1,14 +1,14 @@
 ﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
-// Write your JavaScript code.
-$(function(){
-    $(document).on('submit', 'form.swal-delete-form', function(e){
+$(function () {
+    // Confirmación para eliminar (usado en Autores y Libros)
+    $(document).on('submit', 'form.swal-delete-form', function (e) {
         e.preventDefault();
-        var form = $(this);
+        var form = this;
         Swal.fire({
             title: "¿Estás seguro?",
-            text: "No podrás revertir este cambio!",
+            text: "¡No podrás revertir este cambio!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -18,15 +18,16 @@ $(function(){
             if (result.isConfirmed) {
                 form.submit();
             }
-        }); 
+        });
     });
 
+    // Confirmación para guardar cambios
     $(document).on('submit', 'form.swal-save-form', function (e) {
         e.preventDefault();
-        var form = $(this);
+        var form = this;
         Swal.fire({
             title: "¿Quiere guardar los cambios?",
-            text: "No podrás revertir este cambio!",
+            text: "¡No podrás revertir este cambio!",
             icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -38,8 +39,4 @@ $(function(){
             }
         });
     });
-
-
-
-
-}); 
+});
