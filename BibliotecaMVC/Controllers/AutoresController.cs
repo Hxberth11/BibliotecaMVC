@@ -68,27 +68,42 @@ namespace BibliotecaMVC.Controllers
         // 7. POST: Guardar cambios de edición
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar(Autor autorActualizado)
+        public async Task<IActionResult> Editar(int id,Autor autor)
         {
-            if (!ModelState.IsValid)
+            if (id != autor.Id)
             {
-                return View(autorActualizado);
+                return BadRequest();
             }
 
-            _context.Autores.Update(autorActualizado);
+            if(!ModelState.IsValid)
+            {
+                return View(autor);
+            }
+
+            var existeAutor = await _context.Autores.AnyAsync(a => a.Id == id);
+            if (!existeAutor)
+            {
+                return NotFound();
+            }
+
+            _context.Update(autor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        // 8. GET/POST: Eliminar autor
+        // 8. POST: Eliminar autor
+        [HttpPost, ActionName("Eliminar")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Eliminar(int id)
         {
             var autor = await _context.Autores.FindAsync(id);
-            if (autor != null)
+            if (autor == null) // Correcto: si NO existe, devuelve NotFound
             {
-                _context.Autores.Remove(autor);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
+
+            _context.Autores.Remove(autor);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

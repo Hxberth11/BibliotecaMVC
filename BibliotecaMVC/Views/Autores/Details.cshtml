@@ -1,0 +1,35 @@
+﻿@model BibliotecaMVC.Models.Autor
+
+@{
+    ViewData["Title"] = "Detalles del Autor";
+}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h2 class="card-title">@Model.Nombre @Model.Apellido</h2>
+        <h6 class="card-subtitle mb-3 text-muted">@Model.Nacionalidad</h6>
+
+        <dl class="row">
+            <dt class="col-sm-3">Nombre</dt>
+            <dd class="col-sm-9">@Model.Nombre</dd>
+
+            <dt class="col-sm-3">Apellido</dt>
+            <dd class="col-sm-9">@Model.Apellido</dd>
+
+            <dt class="col-sm-3">Nacionalidad</dt>
+            <dd class="col-sm-9">@Model.Nacionalidad</dd>
+
+            <dt class="col-sm-4">Fecha de Nacimiento</dt>
+            <dd class="col-sm-8">@Model.FechaNacimiento.ToString("dd/MM/yyyy")</dd>
+        </dl>
+
+        <div class="d-flex gap-2">
+            <a asp-action="Editar" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Editar</a>
+            <form asp-action="Eliminar" asp-route-id="@Model.Id" method="post" class="swal-delete-form d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+            </form>
+            <a asp-action="Index" class="btn btn-primary ms-auto">Volver a la lista</a>"
+        </div>
+    </div>
+</div>
