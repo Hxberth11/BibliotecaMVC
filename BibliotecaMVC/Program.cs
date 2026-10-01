@@ -2,14 +2,33 @@ using BibliotecaMVC.Services;
 using BibliotecaMVC.Respositories; // Importamos el namespace del repositorio
 using Microsoft.EntityFrameworkCore;
 using BibliotecaMVC.Data;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<BibliotecaContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("BibliotecaDB")));
+builder.Services.AddSingleton<NumericRoundabortConnectionInterceptor>();
+
+builder.Services.AddDbContext<BibliotecaContext>((serviceProvider, options) =>
+{
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("BibliotecaDB"));
+
+    options.AddInterceptors(
+        serviceProvider.GetRequiredService<NumericRoundabortConnectionInterceptor>());
+
+});
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<BibliotecaContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+});
+
 
 // Registro de servicios
 builder.Services.AddScoped<IAutorService, AutorService>();
