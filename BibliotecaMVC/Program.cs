@@ -1,5 +1,5 @@
 using BibliotecaMVC.Services;
-using BibliotecaMVC.Respositories; // Importamos el namespace del repositorio
+using BibliotecaMVC.Respositories;
 using Microsoft.EntityFrameworkCore;
 using BibliotecaMVC.Data;
 using Microsoft.AspNetCore.Identity;
@@ -18,22 +18,26 @@ builder.Services.AddDbContext<BibliotecaContext>((serviceProvider, options) =>
 
     options.AddInterceptors(
         serviceProvider.GetRequiredService<NumericRoundabortConnectionInterceptor>());
-
 });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<BibliotecaContext>();
+// Configuración de Identity
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+})
+.AddEntityFrameworkStores<BibliotecaContext>()
+.AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
 });
 
-
 // Registro de servicios
 builder.Services.AddScoped<IAutorService, AutorService>();
-
-// Registramos el repositorio de libros como Singleton para mantener los datos en memoria
 builder.Services.AddSingleton<IRepositorioLibro, RepositorioEnMemoria>();
 
 var app = builder.Build();
@@ -42,12 +46,14 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

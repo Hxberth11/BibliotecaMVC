@@ -15,6 +15,48 @@ namespace BibliotecaMVC.Controllers
             _userManager = userManager;
         }
 
+        // --- REGISTRO DE USUARIOS ---
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = new IdentityUser
+            {
+                UserName = model.Username,
+                Email = model.Email
+            };
+
+            // Crear el usuario con la contraseña proporcionada
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                // Iniciar sesión automáticamente tras el registro
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Si hay errores de validación (por ejemplo, contraseña no cumple requisitos)
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
+        }
+
+        // --- INICIO DE SESIÓN ---
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
@@ -26,14 +68,6 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -41,13 +75,11 @@ namespace BibliotecaMVC.Controllers
                 return View(model);
             }
 
-            // 1. Buscamos al usuario por nombre de usuario o email y lo asignamos a la variable "user"
             var user = await _userManager.FindByNameAsync(model.UsernameOrEmail)
                 ?? await _userManager.FindByEmailAsync(model.UsernameOrEmail);
 
             if (user is not null)
             {
-                // 2. Iniciamos sesión pasando user.UserName (string) como primer parámetro
                 var result = await _signInManager.PasswordSignInAsync(
                     user.UserName!,
                     model.Password,
@@ -67,6 +99,15 @@ namespace BibliotecaMVC.Controllers
 
             ModelState.AddModelError(string.Empty, "Nombre de usuario o contraseña incorrectos.");
             return View(model);
+        }
+
+        // --- CIERRE DE SESIÓN ---
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

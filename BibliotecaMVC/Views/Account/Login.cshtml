@@ -1,37 +1,58 @@
 ﻿@model LoginViewModel
 
 @{
-    ViewData["Title"] = "Iniciar sesion";
+    ViewData["Title"] = "Iniciar sesión";
 }
 
-<h1>Iniciar sesion</h1>
-
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Login" method="post">
-            <input type="hidden" asp-for="ReturnUrl" />
-
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="mb-3">
-                <label asp-for="UsernameOrEmail" class="form-label"></label>
-                <input asp-for="UsernameOrEmail" class="form-control" autocomplete="username"/>
-                <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
-
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" autocomplete="username" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+<div class="row justify-content-center mt-4">
+    <div class="col-md-5">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h4 class="mb-0 fw-bold">Iniciar Sesión</h4>
             </div>
 
-            <div class="form-check mb-3">
-                <input asp-for="RememberMe" class="form-check-input" />
-                <label asp-for="RememberMe" class="form-check-label"></label>
+            <div class="card-body p-4">
+                <form asp-action="Login" method="post">
+                    <input type="hidden" asp-for="ReturnUrl" />
+
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                            <div asp-validation-summary="ModelOnly"></div>
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <label asp-for="UsernameOrEmail" class="form-label fw-semibold"></label>
+                        <input asp-for="UsernameOrEmail" class="form-control" placeholder="Ej: usuario o correo@ejemplo.com" autocomplete="username" />
+                        <span asp-validation-for="UsernameOrEmail" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-semibold"></label>
+                        <input asp-for="Password" class="form-control" placeholder="••••••••" autocomplete="current-password" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input asp-for="RememberMe" class="form-check-input" />
+                        <label asp-for="RememberMe" class="form-check-label text-secondary"></label>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg fs-6">
+                            Ingresar
+                        </button>
+                    </div>
+                </form>
             </div>
 
-            <button type="submit" class="btn btn-primary">Iniciar sesion</button>
-        </form>
+            <div class="card-footer text-center py-3 bg-light border-0">
+                <span class="text-muted">¿No tienes una cuenta?</span>
+                <a asp-action="Register" class="text-decoration-none fw-bold ms-1">Regístrate aquí</a>
+            </div>
+        </div>
     </div>
-    
 </div>
 
 @section Scripts {

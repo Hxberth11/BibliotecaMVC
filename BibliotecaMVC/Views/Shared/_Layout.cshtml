@@ -46,16 +46,19 @@
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <span class="nav-link">@User.Identity.Name</span>
+                                <span class="nav-link text-light fw-bold">Hola, @User.Identity.Name</span>
                             </li>
                             <li class="nav-item">
                                 <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-link nav-link">Cerrar sesión</button>
+                                    <button type="submit" class="btn btn-link nav-link text-danger border-0">Cerrar sesión</button>
                                 </form>
                             </li>
                         }
                         else
                         {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Register">Registrarse</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Account" asp-action="Login">Iniciar sesión</a>
                             </li>
