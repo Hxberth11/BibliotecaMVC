@@ -1,9 +1,11 @@
 using BibliotecaMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BibliotecaMVC.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         public IActionResult Index()
@@ -11,6 +13,7 @@ namespace BibliotecaMVC.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult AcercaDe()
         {
             return View();

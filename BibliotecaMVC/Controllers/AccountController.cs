@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using BibliotecaMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BibliotecaMVC.Controllers
 {
@@ -17,6 +18,7 @@ namespace BibliotecaMVC.Controllers
 
         // --- REGISTRO DE USUARIOS ---
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
@@ -24,6 +26,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
@@ -58,6 +61,7 @@ namespace BibliotecaMVC.Controllers
 
         // --- INICIO DE SESIÓN ---
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login(string? returnUrl = null)
         {
             return View(new LoginViewModel
@@ -68,6 +72,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -84,7 +89,7 @@ namespace BibliotecaMVC.Controllers
                     user.UserName!,
                     model.Password,
                     model.RememberMe,
-                    lockoutOnFailure: false
+                    lockoutOnFailure: true
                 );
 
                 if (result.Succeeded)
@@ -95,10 +100,23 @@ namespace BibliotecaMVC.Controllers
                     }
                     return RedirectToAction("Index", "Home");
                 }
+
+                if(result.IsLockedOut)
+                {
+                    ModelState.AddModelError(string.Empty, "La cuenta está bloqueada temporalmente. Intenta nuevamente más tarde.");
+                    return View(model);
+                }
             }
 
             ModelState.AddModelError(string.Empty, "Nombre de usuario o contraseña incorrectos.");
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
         // --- CIERRE DE SESIÓN ---

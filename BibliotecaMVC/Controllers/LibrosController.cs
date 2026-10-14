@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using BibliotecaMVC.Data;
 using BibliotecaMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BibliotecaMVC.Controllers
 {
+    [Authorize] // Requerir autenticación para acceder a libros
     public class LibrosController : Controller
     {
         private readonly BibliotecaContext _context;
@@ -14,14 +16,14 @@ namespace BibliotecaMVC.Controllers
             _context = context;
         }
 
-        // GET: Libros (Mostrar el listado de libros)
+        // GET: Libros (Mostrar el listado de libros - Accesible para cualquier usuario autenticado)
         public async Task<IActionResult> Index()
         {
             var libros = await _context.Libros.ToListAsync();
             return View(libros);
         }
 
-        // GET: Libros/Details/5 (Ver detalle de un libro)
+        // GET: Libros/Details/5 (Ver detalle - Accesible para cualquier usuario autenticado)
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,15 +42,17 @@ namespace BibliotecaMVC.Controllers
             return View(libro);
         }
 
-        // GET: Libros/Create (Mostrar formulario para agregar libro)
+        // GET: Libros/Create (Solo Admin)
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Libros/Create (Guardar el nuevo libro en SQL Server con EF Core)
+        // POST: Libros/Create (Solo Admin)
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(Libro libro)
         {
             if (ModelState.IsValid)
@@ -65,7 +69,8 @@ namespace BibliotecaMVC.Controllers
             return View(libro);
         }
 
-        // GET: Libros/Editar/5 (Carga el libro en el formulario)
+        // GET: Libros/Editar/5 (Solo Admin)
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Editar(int? id)
         {
             if (id == null)
@@ -73,7 +78,6 @@ namespace BibliotecaMVC.Controllers
                 return NotFound();
             }
 
-            // Busca el libro por ID utilizando EF Core
             var libro = await _context.Libros.FindAsync(id);
             if (libro == null)
             {
@@ -82,9 +86,10 @@ namespace BibliotecaMVC.Controllers
             return View(libro);
         }
 
-        // POST: Libros/Editar/5 (Guarda las modificaciones en la base de datos)
+        // POST: Libros/Editar/5 (Solo Admin)
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Editar(int id, Libro libro)
         {
             if (id != libro.Id)
@@ -92,13 +97,11 @@ namespace BibliotecaMVC.Controllers
                 return BadRequest();
             }
 
-            // Asigna imagen por defecto si viene vacía
             if (string.IsNullOrEmpty(libro.ImagenUrl))
             {
                 libro.ImagenUrl = "default.jpg";
             }
 
-            // Forzamos actualización para evitar bloqueos por validación estricta de ModelState
             try
             {
                 _context.Update(libro);
@@ -123,9 +126,10 @@ namespace BibliotecaMVC.Controllers
             return _context.Libros.Any(e => e.Id == id);
         }
 
-        // POST: Libros/Eliminar/5
+        // POST: Libros/Eliminar/5 (Solo Admin)
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Eliminar(int id)
         {
             var libro = await _context.Libros.FindAsync(id);

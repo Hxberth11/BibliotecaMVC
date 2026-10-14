@@ -6,11 +6,14 @@
 
 <div class="d-flex justify-content-between align-items-center my-4">
     <h2>Listado de Libros</h2>
-    @if (Model.Any())
+    @if (User.IsInRole("Admin"))
     {
-        <a asp-action="Create" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i> Agregar Nuevo Libro
-        </a>
+        @if (Model.Any())
+        {
+            <a asp-action="Create" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Agregar Nuevo Libro
+            </a>
+        }
     }
 </div>
 
@@ -23,9 +26,13 @@
             </div>
             <h3 class="card-title text-secondary fw-bold mb-2">Hay 0 libros registrados</h3>
             <p class="card-text text-muted mb-4">Aún no se han guardado registros en la base de datos SQL Server.</p>
-            <a asp-action="Create" class="btn btn-primary btn-lg px-4 shadow-sm">
-                Agregar el primer libro
-            </a>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Create" class="btn btn-primary btn-lg px-4 shadow-sm">
+                    Agregar el primer libro
+                </a>
+            }
         </div>
     </div>
 }
@@ -69,20 +76,24 @@ else
                             }
                         </p>
 
-                        <!-- Botones de Acción (Ver Detalle, Editar y Eliminar con SweetAlert2) -->
+                        <!-- Botones de Acción (Ver Detalle siempre visible; Editar y Eliminar solo para Admin) -->
                         <div class="mt-auto pt-2 d-flex gap-1">
                             <a asp-action="Details" asp-route-id="@libro.Id" class="btn btn-outline-primary btn-sm flex-fill text-center">
                                 Ver Detalle
                             </a>
-                            <a asp-action="Editar" asp-route-id="@libro.Id" class="btn btn-outline-warning btn-sm flex-fill text-center">
-                                Editar
-                            </a>
-                            <form asp-action="Eliminar" asp-route-id="@libro.Id" method="post" class="flex-fill swal-delete-form">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-outline-danger btn-sm w-100">
-                                    Eliminar
-                                </button>
-                            </form>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Editar" asp-route-id="@libro.Id" class="btn btn-outline-warning btn-sm flex-fill text-center">
+                                    Editar
+                                </a>
+                                <form asp-action="Eliminar" asp-route-id="@libro.Id" method="post" class="flex-fill swal-delete-form">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            }
                         </div>
                     </div>
                 </div>

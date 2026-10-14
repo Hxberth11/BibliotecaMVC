@@ -3,9 +3,11 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using BibliotecaMVC.Models;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BibliotecaMVC.Controllers
 {
+    [Authorize]
     public class CategoriasController : Controller
     {
         private readonly string _connectionString;
@@ -43,6 +45,7 @@ namespace BibliotecaMVC.Controllers
             return View(categorias);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -50,6 +53,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(Categoria categoria)
         {
             if (categoria == null || string.IsNullOrEmpty(categoria.Nombre))
@@ -75,7 +79,7 @@ namespace BibliotecaMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Categorias/Edit/5
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             Categoria categoria = null;
@@ -110,9 +114,9 @@ namespace BibliotecaMVC.Controllers
             return View(categoria);
         }
 
-        // POST: Categorias/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(Categoria categoria)
         {
             if (categoria == null || string.IsNullOrEmpty(categoria.Nombre))
@@ -140,7 +144,7 @@ namespace BibliotecaMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Categorias/Delete/5
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             Categoria categoria = null;
@@ -175,9 +179,9 @@ namespace BibliotecaMVC.Controllers
             return View(categoria);
         }
 
-        // POST: Categorias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteConfirmed(int id)
         {
             using (var conexion = new SqlConnection(_connectionString))

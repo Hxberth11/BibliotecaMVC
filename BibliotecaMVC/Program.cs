@@ -8,11 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddSingleton<NumericRoundabortConnectionInterceptor>();
-
-builder.Services.AddDbContext<BibliotecaContext>((serviceProvider, options) =>
-{
+builder.Services.AddDbContext<BibliotecaContext>((serviceProvider, options) => {
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("BibliotecaDB"));
 
@@ -21,8 +18,10 @@ builder.Services.AddDbContext<BibliotecaContext>((serviceProvider, options) =>
 });
 
 // Configuración de Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-{
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.AllowedForNewUsers = true;
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
@@ -31,9 +30,9 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<BibliotecaContext>()
 .AddDefaultTokenProviders();
 
-builder.Services.ConfigureApplicationCookie(options =>
-{
+builder.Services.ConfigureApplicationCookie(options => {
     options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
 // Registro de servicios
@@ -52,7 +51,6 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -62,5 +60,31 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+// Creacion automatica de roles y asignacion
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+
+    string[] roles = { "Admin", "Usuario" };
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    // Reemplaza con el correo de tu usuario administrador existente
+    // Nombre: Admin Email : Admin@biblioteca.com y contra Admin123_
+    var adminEmail = "Admin@biblioteca.com";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Admin"))
+    {
+        await userManager.AddToRoleAsync(adminUser, "Admin");
+    }
+}
 
 app.Run();
