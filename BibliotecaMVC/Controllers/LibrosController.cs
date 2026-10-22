@@ -42,17 +42,17 @@ namespace BibliotecaMVC.Controllers
             return View(libro);
         }
 
-        // GET: Libros/Create (Solo Admin)
-        [Authorize(Roles = "Admin")]
+        // GET: Libros/Create (Admin y Bibliotecario)
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Libros/Create (Solo Admin)
+        // POST: Libros/Create (Admin y Bibliotecario)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Create(Libro libro)
         {
             if (ModelState.IsValid)
@@ -69,8 +69,8 @@ namespace BibliotecaMVC.Controllers
             return View(libro);
         }
 
-        // GET: Libros/Editar/5 (Solo Admin)
-        [Authorize(Roles = "Admin")]
+        // GET: Libros/Editar/5 (Admin y Bibliotecario)
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Editar(int? id)
         {
             if (id == null)
@@ -86,10 +86,10 @@ namespace BibliotecaMVC.Controllers
             return View(libro);
         }
 
-        // POST: Libros/Editar/5 (Solo Admin)
+        // POST: Libros/Editar/5 (Admin y Bibliotecario)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Editar(int id, Libro libro)
         {
             if (id != libro.Id)
@@ -126,10 +126,10 @@ namespace BibliotecaMVC.Controllers
             return _context.Libros.Any(e => e.Id == id);
         }
 
-        // POST: Libros/Eliminar/5 (Solo Admin)
+        // POST: Libros/Eliminar/5 (Admin y Bibliotecario)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Eliminar(int id)
         {
             var libro = await _context.Libros.FindAsync(id);

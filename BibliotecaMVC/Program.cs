@@ -8,7 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddSingleton<NumericRoundabortConnectionInterceptor>();
+
 builder.Services.AddDbContext<BibliotecaContext>((serviceProvider, options) => {
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("BibliotecaDB"));
@@ -43,19 +45,18 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-   var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-   var usuarios = await userManager.Users.ToListAsync();
-   foreach (var usuario in usuarios)
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var usuarios = await userManager.Users.ToListAsync();
+    foreach (var usuario in usuarios)
     {
-       if((await userManager.GetRolesAsync(usuario)).Count == 0)
+        if ((await userManager.GetRolesAsync(usuario)).Count == 0)
         {
             var result = await userManager.AddToRoleAsync(usuario, "Usuario");
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
                 throw new InvalidOperationException(
                     $"No se pudo asignar el rol 'Usuario' al usuario {usuario.UserName}. Errores: {string.Join(", ", result.Errors.Select(error => error.Description))}"
                     );
-
             }
         }
     }
@@ -88,7 +89,7 @@ using (var scope = app.Services.CreateScope())
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
-    string[] roles = { "Admin", "Usuario" };
+    string[] roles = { "Admin", "Bibliotecario", "Usuario" };
     foreach (var role in roles)
     {
         if (!await roleManager.RoleExistsAsync(role))
@@ -97,7 +98,6 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    // Reemplaza con el correo de tu usuario administrador existente
     // Nombre: Admin Email : Admin@biblioteca.com y contra Admin123_
     var adminEmail = "Admin@biblioteca.com";
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
