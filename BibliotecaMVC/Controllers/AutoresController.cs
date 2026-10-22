@@ -32,7 +32,7 @@ namespace BibliotecaMVC.Controllers
             return View(autor);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public IActionResult Create()
         {
             return View();
@@ -40,7 +40,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Create(Autor autor)
         {
             if (!ModelState.IsValid)
@@ -53,7 +53,7 @@ namespace BibliotecaMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Editar(int id)
         {
             var autor = await _context.Autores.FindAsync(id);
@@ -66,7 +66,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Editar(int id, Autor autor)
         {
             if (id != autor.Id)
@@ -92,7 +92,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost, ActionName("Eliminar")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Eliminar(int id)
         {
             var autor = await _context.Autores.FindAsync(id);

@@ -45,15 +45,29 @@ namespace BibliotecaMVC.Controllers
 
             if (result.Succeeded)
             {
-                // Iniciar sesión automáticamente tras el registro
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
-            }
+                var roleResult = await _userManager.AddToRoleAsync(user, "Usuario");
+                if(!roleResult.Succeeded)
+                {
+                    // Iniciar sesión automáticamente tras el registro
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("Index", "Home");
 
-            // Si hay errores de validación (por ejemplo, contraseña no cumple requisitos)
-            foreach (var error in result.Errors)
+                }
+
+                // Si hay errores de validación (por ejemplo, contraseña no cumple requisitos)
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+            }
+            else
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                // Si hay errores de validación (por ejemplo, contraseña no cumple requisitos)
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
 
             return View(model);
