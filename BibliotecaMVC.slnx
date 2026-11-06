@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="BibliotecaMVC.Tests/BibliotecaMVC.Tests.csproj" Id="27a0f379-3c73-4557-b8e5-8f2a59840c0a" />
   <Project Path="BibliotecaMVC/BibliotecaMVC.csproj" />
 </Solution>
